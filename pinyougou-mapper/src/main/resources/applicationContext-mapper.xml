@@ -26,10 +26,17 @@
     </bean>
 
     <!-- 配置数据访问接口的代理对象 ( 批量配置 )到基础包下扫描所有的数据访问接口，
-    再创建它们的代理对象，然后交给 Spring 容器bean 的 id: 默认为接口的类名，首字母小写 -->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    再创建它们的代理对象，然后交给Spring容器。bean的id: 默认为接口的类名，首字母小写 -->
+    <!-- 配置通用Mapper集成Spring4+Mybatis (简化单表CRUD操作)-->
+    <!--<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.pinyougou.mapper"/>
+        tk集继承了org
+    </bean>-->
+    <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--设置数据访问接口类-->
         <property name="basePackage" value="com.pinyougou.mapper"/>
     </bean>
+
 
     <!-- 配置数据源事务管理器 (DataSourceTransactionManager) -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

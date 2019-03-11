@@ -14,4 +14,14 @@
 
     <!-- Continue editing here -->
 
+    <!--配置插件-->
+    <plugins>
+        <!-- 配置分页拦截器 ( 拦截 SqL 语句，在你的 sql 语句后面加上 limit) -->
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 配置数据库方言(mysql、oracle、sqlserver 等) -->
+            <property name="helperDialect" value="mysql"/>
+            <!-- 配置开启统计查询 count -->
+            <property name="rowBoundsWithCount" value="true"/>
+        </plugin>
+    </plugins>
 </configuration>
