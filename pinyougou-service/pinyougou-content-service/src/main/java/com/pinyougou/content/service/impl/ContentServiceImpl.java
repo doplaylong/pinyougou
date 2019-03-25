@@ -5,7 +5,9 @@ import com.pinyougou.mapper.ContentMapper;
 import com.pinyougou.pojo.Content;
 import com.pinyougou.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
 import java.util.List;
@@ -22,6 +24,8 @@ public class ContentServiceImpl implements ContentService{
 
     @Autowired
     private ContentMapper contentMapper;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     /**
@@ -31,7 +35,13 @@ public class ContentServiceImpl implements ContentService{
      */
     @Override
     public void save(Content content) {
+        try {
 
+            // 清除Redis缓存
+            redisTemplate.delete("contents");
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -41,7 +51,13 @@ public class ContentServiceImpl implements ContentService{
      */
     @Override
     public void update(Content content) {
+        try {
 
+            // 清除Redis缓存
+            redisTemplate.delete("contents");
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -61,7 +77,13 @@ public class ContentServiceImpl implements ContentService{
      */
     @Override
     public void deleteAll(Serializable[] ids) {
+        try {
 
+            // 清除Redis缓存
+            redisTemplate.delete("contents");
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -103,18 +125,34 @@ public class ContentServiceImpl implements ContentService{
      **/
     @Override
     public List<Content> findContentByCategoryId(Long categoryId) {
+
+        List<Content> contentList = null;
         try {
-           /* *//* 创建Example对象 *//*
+             contentList = (List<Content>) redisTemplate.boundValueOps("contents").get();
+             if (contentList != null && contentList.size() > 0) {
+                 return contentList;
+             }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        try {
+            // 创建Example对象
             Example example = new Example(Content.class);
-            *//* 创建条件对象 *//*
+            // 创建条件对象
             Example.Criteria criteria = example.createCriteria();
-            *//* 添加条件 *//*
+            // 添加条件
             criteria.andEqualTo("categoryId", categoryId);
             criteria.andEqualTo("status", 1);
             example.orderBy("sortOrder").asc();
-            *//* 条件查询*//*
-            return contentMapper.selectByExample(example);*/
-            return contentMapper.findContentByCategoryId(categoryId);
+            // 条件查询
+            contentList = contentMapper.selectByExample(example);
+            //return contentMapper.findContentByCategoryId(categoryId);
+            try {
+                redisTemplate.boundValueOps("contents").set(contentList);
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+            return contentList;
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }

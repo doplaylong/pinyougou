@@ -1,8 +1,10 @@
 package com.pinyougou.service;
 
 import com.pinyougou.pojo.Item;
-import java.util.List;
+
 import java.io.Serializable;
+import java.util.List;
+
 /**
  * ItemService 服务接口
  * @date 2019-03-01 22:17:35
@@ -30,5 +32,4 @@ public interface ItemService {
 
 	/** 多条件分页查询 */
 	List<Item> findByPage(Item item, int page, int rows);
-
 }

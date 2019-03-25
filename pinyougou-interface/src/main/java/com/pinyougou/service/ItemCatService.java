@@ -1,8 +1,9 @@
 package com.pinyougou.service;
 
 import com.pinyougou.pojo.ItemCat;
-import java.util.List;
+
 import java.io.Serializable;
+import java.util.List;
 /**
  * ItemCatService 服务接口
  * @date 2019-03-01 22:17:35
@@ -33,4 +34,6 @@ public interface ItemCatService {
 
 	/** 根据父级id查找商品分类 */
     List<ItemCat> findItemCatByParentId(Long parentId);
+
+
 }

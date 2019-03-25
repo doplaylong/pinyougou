@@ -1,8 +1,11 @@
 package com.pinyougou.service;
 
 import com.pinyougou.pojo.Goods;
-import java.util.List;
+
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
 /**
  * GoodsService 服务接口
  * @date 2019-03-01 22:17:35
@@ -30,5 +33,8 @@ public interface GoodsService {
 
 	/** 多条件分页查询 */
 	List<Goods> findByPage(Goods goods, int page, int rows);
+
+	/** 根据商品id查询商品信息 */
+	Map<String,Object> getGoods(Long goodsId);
 
 }
